@@ -91,7 +91,7 @@ int updateMenu(sqlite3 *db) {
     cout << "Enter your choice: ";
     cin >> choice;
     if (choice == 1) updateProduct(db);
-    if (choice == 2) updateCustomer(db);
+    //if (choice == 2) updateCustomer(db);
     return choice;
 }
 
