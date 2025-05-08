@@ -32,9 +32,9 @@ int main() {
     choice = mainMenu();
     while (true) {
         switch (choice) {
-            case 1: choice = addMenu(); break;
-            case 2: choice = updateMenu(); break;
-            case 3: choice = deleteMenu(); break;
+            case 1: choice = addMenu(db); break;
+            case 2: choice = updateMenu(db); break;
+            case 3: choice = deleteMenu(db); break;
             case 4: createOrderTransaction(db); break;
             case 5: generateSalesReport(db); break;
             case 6: generateCustomerOrderReport(db); break;
