@@ -1,5 +1,14 @@
+/* Program name: Final Project 
+   Author: Madison Schultz
+   Date last updated: 2025-05-08
+   Purpose: Access the Sweet Treats database for final project
+*/
+
+#include "sqlite3.h"
 #include <iostream>
-#include <sqlite3.h>
+#include <string>
+#include <iomanip>
+
 using namespace std;
 
 int mainMenu();
@@ -60,7 +69,7 @@ int mainMenu() {
     return choice;
 }
 
-int addMenu() {
+int addMenu(sqlite3 *db) {
     int choice;
     cout << "Add Data Menu:" << endl;
     cout << "1. Add Product" << endl;
@@ -73,7 +82,7 @@ int addMenu() {
     return choice;
 }
 
-int updateMenu() {
+int updateMenu(sqlite3 *db) {
     int choice;
     cout << "Update Data Menu:" << endl;
     cout << "1. Update Product" << endl;
@@ -86,7 +95,7 @@ int updateMenu() {
     return choice;
 }
 
-int deleteMenu() {
+int deleteMenu(sqlite3 *db) {
     int choice;
     cout << "Delete Data Menu:" << endl;
     cout << "1. Delete Product" << endl;
