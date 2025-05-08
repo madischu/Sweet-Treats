@@ -171,16 +171,38 @@ int customerMenu(sqlite3* db) {
     return 0;
 }
 
-int main() {
-    sqlite3* db;
-    int rc = sqlite3_open("sakila.db", &db);
-    if (rc) {
-        cerr << "Can't open database: " << sqlite3_errmsg(db) << endl;
-        return 0;
+int main()
+{
+    int choice;
+
+    sqlite3 *mydb;
+
+    int rc;
+
+    // Open the database
+    rc = sqlite3_open("sweetTreats.db", &mydb);
+    if (rc)
+    {
+        cerr << "Can't open database: " << sqlite3_errmsg(mydb) << endl;
+        return 1;
     }
 
-    mainMenu(db);
+    cout << "Welcome to SweetTreats" << endl;
+    choice = mainMenu(mydb);
+    while (true)
+    {
+        switch (choice)
+        {
+            case 1: productMenu(mydb); break;
+            case 2: customerMenu(mydb); break;
+            case 3: return 0;
+            default: cout << "That is not a valid choice." << endl;
+        }
+        cout << "\n\n";
+        choice = mainMenu(mydb);
+    }
 
-    sqlite3_close(db);
+    sqlite3_close(mydb);
     return 0;
 }
+
