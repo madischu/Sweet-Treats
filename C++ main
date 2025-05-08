@@ -8,23 +8,23 @@ int updateMenu();
 int deleteMenu();
 int transactionMenu();
 
-void addProduct(sqlite3 *mydb);
-void addCustomer(sqlite3 *mydb);
-void updateProduct(sqlite3 *mydb);
-void updateCustomer(sqlite3 *mydb);
-void deleteProduct(sqlite3 *mydb);
-void createOrderTransaction(sqlite3 *mydb);
-void generateSalesReport(sqlite3 *mydb);
-void generateCustomerOrderReport(sqlite3 *mydb);
+void addProduct(sqlite3 *db);
+void addCustomer(sqlite3 *db);
+void updateProduct(sqlite3 *db);
+void updateCustomer(sqlite3 *db);
+void deleteProduct(sqlite3 *db);
+void createOrderTransaction(sqlite3 *db);
+void generateSalesReport(sqlite3 *db);
+void generateCustomerOrderReport(sqlite3 *db);
 
 int main() {
     int choice;
-    sqlite3 *mydb;
+    sqlite3 *db;
     int rc;
 
-    rc = sqlite3_open("sweetTreats.db", &mydb);
+    rc = sqlite3_open("sweetTreats.db", &db);
     if (rc) {
-        cerr << "Can't open database: " << sqlite3_errmsg(mydb) << endl;
+        cerr << "Can't open database: " << sqlite3_errmsg(db) << endl;
         return 1;
     }
 
@@ -35,10 +35,10 @@ int main() {
             case 1: choice = addMenu(); break;
             case 2: choice = updateMenu(); break;
             case 3: choice = deleteMenu(); break;
-            case 4: createOrderTransaction(mydb); break;
-            case 5: generateSalesReport(mydb); break;
-            case 6: generateCustomerOrderReport(mydb); break;
-            case -1: sqlite3_close(mydb); return 0;
+            case 4: createOrderTransaction(db); break;
+            case 5: generateSalesReport(db); break;
+            case 6: generateCustomerOrderReport(db); break;
+            case -1: sqlite3_close(db); return 0;
             default: cout << "Invalid choice. Please try again." << endl;
         }
         choice = mainMenu();
@@ -68,8 +68,8 @@ int addMenu() {
     cout << "-1. Return to Main Menu" << endl;
     cout << "Enter your choice: ";
     cin >> choice;
-    if (choice == 1) addProduct(mydb);
-    if (choice == 2) addCustomer(mydb);
+    if (choice == 1) addProduct(db);
+    if (choice == 2) addCustomer(db);
     return choice;
 }
 
@@ -81,8 +81,8 @@ int updateMenu() {
     cout << "-1. Return to Main Menu" << endl;
     cout << "Enter your choice: ";
     cin >> choice;
-    if (choice == 1) updateProduct(mydb);
-    if (choice == 2) updateCustomer(mydb);
+    if (choice == 1) updateProduct(db);
+    if (choice == 2) updateCustomer(db);
     return choice;
 }
 
@@ -93,11 +93,11 @@ int deleteMenu() {
     cout << "-1. Return to Main Menu" << endl;
     cout << "Enter your choice: ";
     cin >> choice;
-    if (choice == 1) deleteProduct(mydb);
+    if (choice == 1) deleteProduct(db);
     return choice;
 }
 
-void addProduct(sqlite3 *mydb) {
+void addProduct(sqlite3 *db) {
     string productName;
     float price;
     int quantity;
@@ -111,7 +111,7 @@ void addProduct(sqlite3 *mydb) {
 
     string sql = "INSERT INTO Product (name, price, quantity) VALUES ('" + productName + "', " + to_string(price) + ", " + to_string(quantity) + ");";
     char *errMsg = 0;
-    int rc = sqlite3_exec(mydb, sql.c_str(), 0, 0, &errMsg);
+    int rc = sqlite3_exec(db, sql.c_str(), 0, 0, &errMsg);
     if (rc != SQLITE_OK) {
         cerr << "SQL error: " << errMsg << endl;
         sqlite3_free(errMsg);
@@ -120,7 +120,7 @@ void addProduct(sqlite3 *mydb) {
     }
 }
 
-void addCustomer(sqlite3 *mydb) {
+void addCustomer(sqlite3 *db) {
     string name;
     string email;
 
@@ -131,7 +131,7 @@ void addCustomer(sqlite3 *mydb) {
 
     string sql = "INSERT INTO Customer (name, email) VALUES ('" + name + "', '" + email + "');";
     char *errMsg = 0;
-    int rc = sqlite3_exec(mydb, sql.c_str(), 0, 0, &errMsg);
+    int rc = sqlite3_exec(db, sql.c_str(), 0, 0, &errMsg);
     if (rc != SQLITE_OK) {
         cerr << "SQL error: " << errMsg << endl;
         sqlite3_free(errMsg);
@@ -140,7 +140,7 @@ void addCustomer(sqlite3 *mydb) {
     }
 }
 
-void updateProduct(sqlite3 *mydb) {
+void updateProduct(sqlite3 *db) {
     int productId;
     string newName;
     float newPrice;
@@ -154,7 +154,7 @@ void updateProduct(sqlite3 *mydb) {
 
     string sql = "UPDATE Product SET name = '" + newName + "', price = " + to_string(newPrice) + " WHERE id = " + to_string(productId) + ";";
     char *errMsg = 0;
-    int rc = sqlite3_exec(mydb, sql.c_str(), 0, 0, &errMsg);
+    int rc = sqlite3_exec(db, sql.c_str(), 0, 0, &errMsg);
     if (rc != SQLITE_OK) {
         cerr << "SQL error: " << errMsg << endl;
         sqlite3_free(errMsg);
@@ -163,14 +163,14 @@ void updateProduct(sqlite3 *mydb) {
     }
 }
 
-void deleteProduct(sqlite3 *mydb) {
+void deleteProduct(sqlite3 *db) {
     int productId;
     cout << "Enter product ID to delete: ";
     cin >> productId;
 
     string sql = "DELETE FROM Product WHERE id = " + to_string(productId) + ";";
     char *errMsg = 0;
-    int rc = sqlite3_exec(mydb, sql.c_str(), 0, 0, &errMsg);
+    int rc = sqlite3_exec(db, sql.c_str(), 0, 0, &errMsg);
     if (rc != SQLITE_OK) {
         cerr << "SQL error: " << errMsg << endl;
         sqlite3_free(errMsg);
@@ -179,7 +179,7 @@ void deleteProduct(sqlite3 *mydb) {
     }
 }
 
-void createOrderTransaction(sqlite3 *mydb) {
+void createOrderTransaction(sqlite3 *db) {
     int customerId;
     float totalAmount;
     cout << "Enter customer ID: ";
@@ -187,26 +187,26 @@ void createOrderTransaction(sqlite3 *mydb) {
     cout << "Enter order total: ";
     cin >> totalAmount;
 
-    sqlite3_exec(mydb, "BEGIN TRANSACTION;", 0, 0, 0);
+    sqlite3_exec(db, "BEGIN TRANSACTION;", 0, 0, 0);
 
     // Insert order
     string insertOrderSQL = "INSERT INTO Order (customer_id, total_amount) VALUES (" + to_string(customerId) + ", " + to_string(totalAmount) + ");";
-    sqlite3_exec(mydb, insertOrderSQL.c_str(), 0, 0, 0);
+    sqlite3_exec(db, insertOrderSQL.c_str(), 0, 0, 0);
 
     // Update customer balance
     string updateCustomerSQL = "UPDATE Customer SET balance = balance + " + to_string(totalAmount) + " WHERE id = " + to_string(customerId) + ";";
-    sqlite3_exec(mydb, updateCustomerSQL.c_str(), 0, 0, 0);
+    sqlite3_exec(db, updateCustomerSQL.c_str(), 0, 0, 0);
 
-    sqlite3_exec(mydb, "COMMIT;", 0, 0, 0);
+    sqlite3_exec(db, "COMMIT;", 0, 0, 0);
     cout << "Order created successfully and customer balance updated." << endl;
 }
 
-void generateSalesReport(sqlite3 *mydb) {
+void generateSalesReport(sqlite3 *db) {
     string sql = "SELECT p.name, SUM(od.quantity) FROM Product p JOIN OrderDetail od ON p.id = od.product_id GROUP BY p.name;";
-    sqlite3_exec(mydb, sql.c_str(), 0, 0, 0);
+    sqlite3_exec(db, sql.c_str(), 0, 0, 0);
 }
 
-void generateCustomerOrderReport(sqlite3 *mydb) {
+void generateCustomerOrderReport(sqlite3 *db) {
     string sql = "SELECT c.name, o.total_amount FROM Customer c JOIN Order o ON c.id = o.customer_id;";
-    sqlite3_exec(mydb, sql.c_str(), 0, 0, 0);
+    sqlite3_exec(db, sql.c_str(), 0, 0, 0);
 }
