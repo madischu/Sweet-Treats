@@ -4,6 +4,8 @@
    Purpose: Access the Sweet Treats database for final project
 */
 
+//g++ -pedantic-errors ./STmain.cpp -lsqlite3 -o STmain
+
 #include "sqlite3.h"
 #include <iostream>
 #include <string>
@@ -20,7 +22,7 @@ int transactionMenu();
 void addProduct(sqlite3 *db);
 void addCustomer(sqlite3 *db);
 void updateProduct(sqlite3 *db);
-void updateCustomer(sqlite3 *db);
+//void updateCustomer(sqlite3 *db);
 void deleteProduct(sqlite3 *db);
 void createOrderTransaction(sqlite3 *db);
 void generateSalesReport(sqlite3 *db);
