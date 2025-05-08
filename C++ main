@@ -3,9 +3,9 @@
 using namespace std;
 
 int mainMenu();
-int addMenu();
-int updateMenu();
-int deleteMenu();
+int addMenu(sqlite3 *db);
+int updateMenu(sqlite3 *db);
+int deleteMenu(sqlite3 *db);
 int transactionMenu();
 
 void addProduct(sqlite3 *db);
